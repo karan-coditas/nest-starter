@@ -1,0 +1,32 @@
+# base image
+FROM node:12
+
+# update deps
+RUN apt-get update
+RUN apt-get install -y git
+
+# workdir
+RUN mkdir -p /home/Downloads/node/app
+WORKDIR /home/Downloads/node/app
+
+# fetch code
+RUN git clone https://github.com/karan-coditas/nest-starter.git
+WORKDIR /home/Downloads/node/app/nest-starter
+
+# install/download project deps
+RUN npm install
+
+# unit test code base
+CMD ["npm" , "test"]
+
+# build code base
+CMD ["npm" , "run-script", "build"]
+
+# go to build folder
+WORKDIR /home/Downloads/node/app/nest-starter/dist
+
+# run build 
+CMD ["node" , "main.js"]
+
+# expose port for use
+EXPOSE 3000
